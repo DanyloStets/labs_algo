@@ -1,3 +1,5 @@
+
+
 class BinaryTree:
     def __init__(self, value, left=None, right=None, parent=None):
         self.value = value
