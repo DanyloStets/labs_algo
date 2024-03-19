@@ -30,4 +30,6 @@ def find_max_hamsters(start_pos, end_pos, amounth,
         return find_max_hamsters(start_pos, midle - 1, amounth,
                                 sum_for_diff_hamsters, original_hamsters)
 
+
+
 print(max_hamsters(100, 2, [[1,2], [4,5], [5,0]]))  
