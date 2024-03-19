@@ -3,6 +3,7 @@ import sys
 sys.path.append('C:\\labsPy\\lab3_py\\src\\')
 from lab3 import BinaryTree,find_bigger
 
+
 class InorderTest(unittest.TestCase):
     def test_built_in(self):
         root = BinaryTree(10)

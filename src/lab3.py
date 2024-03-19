@@ -5,7 +5,6 @@ class BinaryTree:
         self.right = right
         self.parent = parent
 
-
 def find_bigger(tree: BinaryTree, node: BinaryTree) -> BinaryTree:
     next_node = find_next_node(node)
     while next_node.value <= node.value:
