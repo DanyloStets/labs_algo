@@ -129,21 +129,25 @@ class RedBlackTree():
     def delete_fixup(self, x):
         while x != self.root and x.color == BLACK:
             if x == x.parent.left:
+                # case 1
                 w = x.parent.right
                 if w.color == RED:
                     w.color = BLACK
                     x.parent.color = RED
                     self.left_rotate(x.parent)
                     w = x.parent.right
+                # case 2
                 if w.left.color == BLACK and w.right.color == BLACK:
                     w.color = RED 
                     x = x.parent 
                 else:
+                    # case 3
                     if w.right.color == BLACK:
                         w.left.color = BLACK
                         w.color = RED
                         self.right_rotate(w)
                         w = x.parent.right
+                    # case 4
                     w.color = x.parent.color 
                     x.parent.color = BLACK 
                     w.right.color = BLACK 
@@ -151,20 +155,24 @@ class RedBlackTree():
                     x = self.root
             else:
                 w = x.parent.left
+                # case 1
                 if w.color == RED:
                     w.color = BLACK
                     x.parent.color = RED
                     self.right_rotate(x.parent)
                     w = x.parent.left
+                # case 2
                 if w.right.color == BLACK and w.left.color == BLACK:
                     w.color = RED 
                     x = x.parent 
                 else:
+                    # case 3
                     if w.left.color == BLACK:
                         w.right.color = BLACK
                         w.color = RED
                         self.left_rotate(w)
                         w = x.parent.left
+                    # case 4
                     w.color = x.parent.color 
                     x.parent.color = BLACK 
                     w.left.color = BLACK 
