@@ -12,7 +12,7 @@ def read_file(cur_file):
         current_file.close()
         return list_resourse, tuple_resourse, recolour, main_matrix
 
-def flood_fill(cur_file, file_result):
+def flood_fill_recolor(cur_file, file_result):
     list_resourse, tuple_resourse, recolour, main_matrix = read_file(cur_file)
     main = [line.strip().split(',') for line in main_matrix]
 
@@ -40,14 +40,14 @@ def change_position(pos):
 
 def change_colour(pos, colour_to_change, master_matrix, width, height):
         pos = change_position(pos)
-        current_colour = what_colour_in_pos(pos, master_matrix)
+        current_colour = what_colour_in_pos(pos, master_matrix, colour_to_change)
         visited = set()
         queue = []
         queue.append(pos)
         while queue:
             visited.add(queue[0])
             queue.pop(0)            
-            queue = queue + bfs(master_matrix, pos, current_colour, width, height)
+            queue = queue + find_neiborous(master_matrix, pos, current_colour, width, height)
             queue = is_element_was_visited(queue, visited)
             if queue:
                 pos = queue[0]
@@ -70,11 +70,13 @@ def is_element_was_visited(queue, visited):
                 continue
         return queue
 
-def what_colour_in_pos(pos, master_matrix):
+def what_colour_in_pos(pos, master_matrix, color_to_change):
         current_colour = master_matrix[pos[0]][pos[1]]
+        if color_to_change == current_colour:
+             return out_file
         return current_colour
 
-def bfs(master_matrix, position, colour, width, height):
+def find_neiborous(master_matrix, position, colour, width, height):
         vortexs = []
         # verify from up -> right -> down -> left
         if (position[0] - 1 >= 0) and (master_matrix[(position[0] - 1)][position[1]] == colour):
@@ -95,4 +97,4 @@ def bfs(master_matrix, position, colour, width, height):
 #           ['W', 'Y', 'B', 'R'],
 #           ['W', 'B', 'B', 'R']]
 
-# print(flood_fill('tests\\resources\\text.txt', 'tests\\resources\\index.txt'))
+# print(flood_fill_recolor('tests\\resources\\index_pos_is_cur_colour.txt', 'tests\\resources\\index.txt'))
