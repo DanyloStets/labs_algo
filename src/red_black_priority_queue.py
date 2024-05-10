@@ -1,153 +1,180 @@
-RED = True
-BLACK = False
-class Node():
-    def __init__(self, value, priority, color=RED):
-        self.priority = priority
-        self.color = color
-        self.right = None
+from collections import deque
+BLACK = True
+RED = False
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.parent = None 
+        self.color = RED
         self.left = None
+        self.right = None
         self.value = value
-        self.parent = None
 
-class RedBlackTree():
-    def __init__(self, ):
-        self.root = None
+class RedBlackTree:
+    def __init__(self):
+        self.NIL = Node(1, 100)
+        self.NIL.color = BLACK
+        self.NIL.left = None
+        self.NIL.right = None
+        self.root = self.NIL
 
-    def insert(self, value, priority):
-        z = Node(value, priority)
-        y = None
+    def insert(self, key, value):
+        z = Node(key, value)
+        z.left = self.NIL
+        z.right = self.NIL
+        y = None 
         x = self.root
-        if x is None:
-            self.root = Node(value, priority, color=BLACK)
-            return
-        while x is not None:
+        while x != self.NIL:
             y = x
-            if priority > x.priority:
-                x = x.right
+            if z.key < x.key:
+                x = x.left 
             else:
-                x = x.left  
-        z.parent = y
-        if priority > y.priority:
-            y.right = z
+                x = x.right 
+        z.parent = y 
+        if y == None:
+            self.root = z 
+        elif z.key < y.key: 
+            y.left = z 
         else:
-            y.left = z
-        self.insert_fix(z)
+            y.right = z
+
+        self.insert_fixup(z)
 
     def left_rotate(self, x):
         y = x.right
         x.right = y.left 
-        if y.left is not None:
+
+        if y.left != self.NIL:
             y.left.parent = x
+        
         y.parent = x.parent 
+
         if x.parent is None:
             self.root = y
         elif x == x.parent.left:
             x.parent.left = y
         else:
             x.parent.right = y 
+
         y.left = x 
         x.parent = y
 
     def right_rotate(self, x):
         y = x.left 
         x.left = y.right 
-        if y.right is not None:
+
+        if y.right != self.NIL:
             y.right.parent = x
+
         y.parent = x.parent 
+
         if x.parent is None:
             self.root = y 
         elif x == x.parent.right:
             x.parent.right = y 
         else:
             x.parent.left = y 
+
         y.right = x 
         x.parent = y
 
-    def insert_fix(self, z):
+    def insert_fixup(self, z):
         while z.parent and z.parent.color == RED:
             if z.parent == z.parent.parent.left:
-                self.key_in_left(z)
+                y = z.parent.parent.right 
+                if y.color == RED:
+                    z.parent.color = BLACK
+                    y.color = BLACK 
+                    z.parent.parent.color = RED
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.right:
+                        z = z.parent 
+                        self.left_rotate(z)
+                    z.parent.color = BLACK
+                    z.parent.parent.color = RED 
+                    self.right_rotate(z.parent.parent)
             else:
-                self.key_in_right(z)
+                y = z.parent.parent.left 
+                if y.color == RED:
+                    z.parent.color = BLACK
+                    y.color = BLACK
+                    z.parent.parent.color = RED
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.left:
+                        z = z.parent 
+                        self.right_rotate(z)
+                    z.parent.color = BLACK
+                    z.parent.parent.color = RED 
+                    self.left_rotate(z.parent.parent)
             if z == self.root:
                 break
-        self.root.color = BLACK        
+        self.root.color = BLACK
 
-    def key_in_left(self, z):
-        y = z.parent.parent.right
-        if y and y.color == RED:
-            z.parent.color = BLACK
-            y.color = BLACK
-            z.parent.parent.color = RED
-            z = z.parent.parent
+    def delete(self, k=None):
+        if k == None:
+            z = self.root
+
+        z = self.search(k)
+
+        if z == self.NIL:
+            return "Key not found!"
+
+        y = z
+        y_orig_color = y.color 
+        
+        # case 1
+        if z.left == self.NIL:
+            x = z.right 
+            self.transplant(z, z.right)
+        # case 2
+        elif z.right == self.NIL:
+            x = z.left
+            self.transplant(z, z.left)
+        # case 3
         else:
-            if z == z.parent.right:
-                z = z.parent
-                self.left_rotate(z)
-            z.parent.color = BLACK
-            z.parent.parent.color = RED
-            self.right_rotate(z.parent.parent)
-
-    def key_in_right(self, z):
-        y = z.parent.parent.left
-        if y and y.color == RED:
-            z.parent.color = BLACK
-            y.color = BLACK
-            z.parent.parent.color = RED
-            z = z.parent.parent
-        else:
-            if z == z.parent.left:
-                z = z.parent
-                self.right_rotate(z)
-            z.parent.color = BLACK
-            z.parent.parent.color = RED
-            self.left_rotate(z.parent.parent)
-    
-    def search_most_priority(self):
-        x = self.root
-        while x.right:
-            x = x.right
-        return x
-
-    def delete(self):
-        z = self.search_most_priority()
-        node_to_deleted = z
-        z_color = z.color
-
-        if z.left is None:
-            z.color = z.parent.color
-            z = z.parent
-        else:
-            z.color = z.left.color
-            z.left.parent = z.parent
-            z = z.left
-        if z_color == BLACK:
-            self.delete_fixup(z)
-        return node_to_deleted.priority
-
+            y = self.minimum(z.right)
+            y_orig_color = y.color
+            x = y.right 
+            
+            if y.parent == z:
+                x.parent = y
+            else:
+                self.transplant(y, y.right)
+                y.right = z.right
+                y.right.parent = y
+            
+            self.transplant(z, y)
+            y.left = z.left 
+            y.left.parent = y 
+            y.color = z.color 
+        
+        if y_orig_color == BLACK:
+            self.delete_fixup(x)
 
     def delete_fixup(self, x):
         while x != self.root and x.color == BLACK:
             if x == x.parent.left:
-                # case 1
                 w = x.parent.right
+                # type 1
                 if w.color == RED:
                     w.color = BLACK
                     x.parent.color = RED
                     self.left_rotate(x.parent)
                     w = x.parent.right
-                # case 2
+                # type 2
                 if w.left.color == BLACK and w.right.color == BLACK:
                     w.color = RED 
                     x = x.parent 
                 else:
-                    # case 3
+                    # type 3
                     if w.right.color == BLACK:
                         w.left.color = BLACK
                         w.color = RED
                         self.right_rotate(w)
                         w = x.parent.right
-                    # case 4
+                    # type 4
                     w.color = x.parent.color 
                     x.parent.color = BLACK 
                     w.right.color = BLACK 
@@ -155,24 +182,24 @@ class RedBlackTree():
                     x = self.root
             else:
                 w = x.parent.left
-                # case 1
+                # type 1
                 if w.color == RED:
                     w.color = BLACK
                     x.parent.color = RED
                     self.right_rotate(x.parent)
                     w = x.parent.left
-                # case 2
+                # type 2
                 if w.right.color == BLACK and w.left.color == BLACK:
                     w.color = RED 
                     x = x.parent 
                 else:
-                    # case 3
+                    # type 3
                     if w.left.color == BLACK:
                         w.right.color = BLACK
                         w.color = RED
                         self.left_rotate(w)
                         w = x.parent.left
-                    # case 4
+                    # type 4
                     w.color = x.parent.color 
                     x.parent.color = BLACK 
                     w.left.color = BLACK 
@@ -180,24 +207,43 @@ class RedBlackTree():
                     x = self.root
         x.color = BLACK
 
-def inorder_tree(self, node):
-        if node is None:
-            return
+    def transplant(self, u, v):
+        if u.parent == None:
+            self.root = v
+        elif u == u.parent.left:
+            u.parent.left = v 
+        else:
+            u.parent.right = v
+        v.parent = u.parent 
 
-        self.inorder_tree(node.left)
-        print(node.color)
-        print(node.priority)
-        self.inorder_tree(node.right)
+    def minimum(self, x):
+        while x.left != self.NIL:
+            x = x.left
+        return x
 
-# tree = RedBlackTree()
-# tree.insert(1, 11)
-# tree.insert(30, 10)
-# tree.insert(11, 6)
-# tree.insert(12, 7)
-# tree.insert(13, 3)
-# tree.insert(14, 1)
-# tree.insert(15, 8)
-# tree.insert(16, 4)
-# print(tree.delete())
-# print(tree.root.color)
-# print(tree.root.priority)
+    def search(self, k):
+        x = self.root
+        while x != self.NIL and k != x.key:
+            if k < x.key:
+                x = x.left
+            else:
+                x = x.right
+        return x
+    
+    def print_tree(self, print_color=False):
+        queue = deque()
+        queue.append(self.root)
+
+        while(queue):
+            node = queue.popleft()
+
+            if print_color:
+                print(f'{node.key}{node.print_color()}', end=' ')
+            else:
+                print(node.key, end=' ')
+
+            if node.left != self.NIL:
+                queue.append(node.left)
+            if node.right != self.NIL:
+                queue.append(node.right)
+
