@@ -1,17 +1,15 @@
 import unittest
-import sys
-sys.path.insert(0, '../src')
-from  flood_fill import *
-# from src.flood_fill import flood_fill_recolor
+
+from src.flood_fill import *
 
 class TestFloodFill(unittest.TestCase):
     def test_fill_all_field(self):
-        with open('test\\resourcesindex_all_fill.txt', 
+        with open('resources/index_all_fill.txt',
                   'r', 
                   encoding='utf-8') as file:
-            flood_fill_recolor('tests\\resources\\index_all_fill.txt', 'resources\\index_test_all_fill.txt')
+            flood_fill_recolor('resources/index_all_fill.txt', 'resources/index_test_all_fill.txt')
         
-        with open('resources\\index_test_all_fill.txt',
+        with open('resources/index_test_all_fill.txt',
                    'r',
                     encoding='utf-8') as file:
             matrix_line1 = file.readline().strip()
@@ -26,11 +24,11 @@ class TestFloodFill(unittest.TestCase):
             self.assertEqual(matrix_line5,"['R', 'R', 'R', 'R', 'R']")
 
     def test_is_pos_currunt_colour(self):
-        with open('resources\\index_pos_is_cur_colour.txt', 
+        with open('resources/index_pos_is_cur_colour.txt',
                   'r', 
                   encoding='utf-8'):
-            flood_fill_recolor('resources\\index_pos_is_cur_colour', 'resources\\index_test_pos_in_cur_colour.txt')
-        with open('resources\\index_test_pos_in_cur_colour.txt',
+            flood_fill_recolor('resources/index_pos_is_cur_colour.txt', 'resources/index_test_pos_in_cur_colour.txt')
+        with open('resources/index_test_pos_in_cur_colour.txt',
                    'r',
                     encoding='utf-8') as file:
             matrix_line1 = file.readline().strip()

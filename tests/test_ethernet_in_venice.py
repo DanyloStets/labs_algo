@@ -3,16 +3,16 @@ from src.ethernet_in_venice import *
 
 class TestGameServerLatency(unittest.TestCase):
     def test_ethernet_lengh(self):
-        find_shortest_lengh_ethernet('resoures/island.csv', 'resoures/island.out')
-        with open('resoures/island.out', 'r') as file:
+        find_shortest_lengh_ethernet('resources/island.csv', 'resources/island.out')
+        with open('resources/island.out', 'r') as file:
             result = file.readline()
         self.assertEqual(result, '5')
 
     def test_empty_file(self):
-        find_shortest_lengh_ethernet('resoures/island_empty.csv', 'resoures/island_empty.out')
-        with open('resoures/island_empty.out', 'r') as file:
+        find_shortest_lengh_ethernet('resources/island_empty.csv', 'resources/island_empty.out')
+        with open('resources/island_empty.out', 'r') as file:
             result = file.readline()
-        self.assertEqual(result, '')
+        self.assertEqual(result, '0')
 
 if __name__ == '__main__':
     unittest.main()

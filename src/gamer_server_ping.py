@@ -1,4 +1,4 @@
-from red_black_priority_queue import RedBlackTree
+from src.red_black_priority_queue import RedBlackTree
 
 def read_input(filename):
     with open(filename, 'r') as file:

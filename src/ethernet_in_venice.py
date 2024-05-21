@@ -1,4 +1,4 @@
-from red_black_priority_queue import RedBlackTree
+from src.red_black_priority_queue import RedBlackTree
 def read_file(filename):
     with open(filename, 'r') as file:
         matrix = []
@@ -56,15 +56,15 @@ def count_length_ethernet(graph):
     return min_lengh
 
 def find_shortest_lengh_ethernet(file_in, file_out):
-    if len(file_in) > 100 and len(file_in) < 0:
+    if len(file_in) >= 100 and len(file_in) < 0:
         return 'island must to be from 1 to 100'
     matrix = read_file(file_in)
-    minimal_lengh_conection = prim(matrix)
+    minimal_lengh_conection = prim(matrix, 0)
     out_file(file_out, count_length_ethernet(minimal_lengh_conection))
 
-file = 'island.csv'
-out = 'island.out'
-matrix = read_file(file)
-print(matrix)
-print(prim(matrix))
-out_file(out, count_length_ethernet(prim(matrix)))
+#file = 'island.csv'
+#out = 'island.out'
+#matrix = read_file(file)
+#print(matrix)
+#print(prim(matrix))
+#out_file(out, count_length_ethernet(prim(matrix)))

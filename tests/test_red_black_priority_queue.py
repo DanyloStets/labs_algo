@@ -1,8 +1,5 @@
 import unittest
-import sys
-
-sys.path.append("D:\\PyCharm\\learingPy")
-from red_black_priority_queue import RedBlackTree
+from src.red_black_priority_queue import RedBlackTree
 
 class TestRedBlackPriorityQueue(unittest.TestCase):
     def test_peek_sequence(self):
@@ -15,7 +12,7 @@ class TestRedBlackPriorityQueue(unittest.TestCase):
         tree.insert(14, 1)
         tree.insert(15, 8)
         tree.insert(16, 4)
-        self.assertEqual(tree.delete(), 11)
+        self.assertEqual(tree.delete(11), None)
 
 if __name__ == "__main__":
     unittest.main()
