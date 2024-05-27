@@ -1,7 +1,6 @@
 import unittest
-# import sys
-# sys.path.append('D:\\PyCharm\\lab2')
-from lab2_algo import max_hamsters
+
+from src.lab2_algo import max_hamsters
 class TestMaxHamsters(unittest.TestCase):
     def test_lab2_1(self):
         sum_of_eat = 100

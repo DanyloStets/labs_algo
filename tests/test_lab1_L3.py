@@ -1,8 +1,5 @@
 import unittest
-import sys
-sys.path.append('C:\\labsPy\\lab1_algo_Py\\src\\')
-from lab1Py.lab1_algo_L3 import zig_zag_in_arr
-
+from src.lab1_algo_L3 import zig_zag_in_arr
 
 class TestZigZag(unittest.TestCase):
     def test_zigzag(self):

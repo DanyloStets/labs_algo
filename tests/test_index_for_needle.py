@@ -6,10 +6,10 @@ class TestPatternSearch(unittest.TestCase):
         pattern = "adada"
         text = "adaddacadadadadaddd"
         expected = [7, 9, 11]
-        self.assertEqual(find_needle_indices(pattern, text), expected)
+        self.assertEqual(find_needle_indices(text, pattern), expected)
 
     def test_find_occurrences_no_occurrence(self):
         pattern = "g"
         text = "jfjfjfjfjfjfjfj"
         expected = []
-        self.assertEqual(find_needle_indices(pattern, text), expected)
+        self.assertEqual(find_needle_indices(text, pattern), expected)
